@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sample-api
+  labels:
+    app.kubernetes.io/part-of: siemens-sre-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+  labels:
+    app.kubernetes.io/part-of: siemens-sre-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: temporal
+  labels:
+    app.kubernetes.io/part-of: siemens-sre-platform
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-sre
+  labels:
+    app.kubernetes.io/part-of: siemens-sre-platform
