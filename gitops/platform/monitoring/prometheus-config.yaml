@@ -11,7 +11,7 @@ data:
               severity: critical
             annotations:
               summary: "Sample API pod is unavailable"
-              description: "Prometheus cannot scrape the sample API pod {{ $labels.pod }}."
+              description: "Fewer than two sample API pods are being scraped successfully."
 
           - alert: HighApiErrorRate
             expr: |
