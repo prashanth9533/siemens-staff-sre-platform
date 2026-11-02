@@ -4,6 +4,24 @@ groups:
     rules:
       - record: sample_api:request_success_ratio:rate5m
         expr: |
-          sum(rate(sample_api_requests_total{status="200"}[5m]))
+          (
+            sum(rate(sample_api_requests_total{status="200"}[5m]))
+            or vector(0)
+          )
           /
-          sum(rate(sample_api_requests_total[5m]))
+          clamp_min(sum(rate(sample_api_requests_total[5m])), 1e-10)
+
+      - record: sample_api:slo_target
+        expr: vector(0.999)
+
+      - record: sample_api:error_budget_ratio
+        expr: vector(0.001)
+
+      - record: sample_api:error_budget_remaining_ratio
+        expr: |
+          clamp_min(
+            1 - (
+              1 - sample_api:request_success_ratio:rate5m
+            ) / 0.001,
+            0
+          )
