@@ -1,0 +1,41 @@
+groups:
+  - name: sample-api-alerts
+    rules:
+      - alert: SampleApiDown
+        expr: count(up{job="sample-api"} == 1) < 2
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Sample API pod is unavailable"
+          description: "Fewer than two sample API pods are being scraped successfully."
+
+      - alert: HighApiErrorRate
+        expr: |
+          100 *
+          (
+            (sum(rate(sample_api_requests_total{status=~"5.."}[5m])) or vector(0))
+            /
+            clamp_min(sum(rate(sample_api_requests_total[5m])), 1)
+          ) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Sample API error rate is above 5%"
+          description: "The API error rate has exceeded 5% for 5 minutes."
+
+      - alert: HighApiP95Latency
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (
+              rate(sample_api_request_duration_seconds_bucket[5m])
+            )
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Sample API P95 latency is high"
+          description: "API P95 latency has exceeded 500 milliseconds for 5 minutes."
