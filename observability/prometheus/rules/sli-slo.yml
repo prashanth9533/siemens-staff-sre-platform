@@ -1,0 +1,9 @@
+groups:
+  - name: sample-api-sli
+    interval: 30s
+    rules:
+      - record: sample_api:request_success_ratio:rate5m
+        expr: |
+          sum(rate(sample_api_requests_total{status="200"}[5m]))
+          /
+          sum(rate(sample_api_requests_total[5m]))

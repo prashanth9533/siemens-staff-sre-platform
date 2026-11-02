@@ -49,6 +49,7 @@ data:
 
     rule_files:
       - /etc/prometheus/alerts.yml
+      - /etc/prometheus/sli-slo.yml
 
     scrape_configs:
       - job_name: prometheus
@@ -83,6 +84,16 @@ data:
             target_label: namespace
 
         metrics_path: /metrics
+  sli-slo.yml: |
+    groups:
+      - name: sample-api-sli
+        interval: 30s
+        rules:
+          - record: sample_api:request_success_ratio:rate5m
+            expr: |
+              sum(rate(sample_api_requests_total{status="200"}[5m]))
+              /
+              sum(rate(sample_api_requests_total[5m]))
 kind: ConfigMap
 metadata:
   name: prometheus-config
