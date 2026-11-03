@@ -1,0 +1,76 @@
+{
+  "uid": "siemens-sre",
+  "title": "Siemens SRE - Application Performance & Reliability",
+  "tags": ["siemens", "sre", "sample-api"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "15s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "API Request Rate",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+      "datasource": {"type": "prometheus", "name": "Prometheus"},
+      "targets": [
+        {"expr": "sum(rate(sample_api_requests_total[5m]))", "legendFormat": "Requests/sec", "refId": "A"}
+      ]
+    },
+    {
+      "id": 2,
+      "title": "API Error Rate (%)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+      "datasource": {"type": "prometheus", "name": "Prometheus"},
+      "targets": [
+        {"expr": "100 * (sum(rate(sample_api_requests_total{status=~\"5..\"}[5m])) or vector(0)) / clamp_min(sum(rate(sample_api_requests_total[5m])), 1)", "legendFormat": "Error rate", "refId": "A"}
+      ]
+    },
+    {
+      "id": 3,
+      "title": "API P95 Latency (seconds)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "datasource": {"type": "prometheus", "name": "Prometheus"},
+      "targets": [
+        {"expr": "histogram_quantile(0.95, sum by (le) (rate(sample_api_request_duration_seconds_bucket[5m])))", "legendFormat": "P95", "refId": "A"}
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Total API Requests",
+      "type": "stat",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "datasource": {"type": "prometheus", "name": "Prometheus"},
+      "targets": [
+        {"expr": "sum(sample_api_requests_total)", "legendFormat": "Total requests", "refId": "A"}
+      ]
+    },
+    {
+      "id": 5,
+      "title": "API Scrape Availability (%)",
+      "description": "Percentage of discovered sample API targets currently reporting as up.",
+      "type": "stat",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+      "datasource": {"type": "prometheus", "name": "Prometheus"},
+      "targets": [
+        {"expr": "100 * sum(up{job=\"sample-api\"} == 1) / clamp_min(count(up{job=\"sample-api\"}), 1)", "legendFormat": "Availability", "refId": "A"}
+      ]
+    },
+    {
+      "id": 6,
+      "title": "API Pod Health",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+      "datasource": {"type": "prometheus", "name": "Prometheus"},
+      "targets": [
+        {"expr": "up{job=\"sample-api\"}", "legendFormat": "{{pod}}", "refId": "A"}
+      ]
+    }
+  ]
+}

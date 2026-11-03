@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: Siemens SRE Dashboards
+    orgId: 1
+    folder: Siemens SRE
+    type: file
+    disableDeletion: true
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards
