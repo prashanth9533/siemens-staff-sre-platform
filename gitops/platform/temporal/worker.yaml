@@ -23,13 +23,17 @@ spec:
           type: RuntimeDefault
       containers:
         - name: temporal-worker
-          image: siemens-temporal-worker:v3
+          image: siemens-temporal-worker:v4
           imagePullPolicy: IfNotPresent
           env:
             - name: TEMPORAL_ADDRESS
               value: temporal:7233
             - name: PROMETHEUS_URL
               value: http://prometheus.observability.svc.cluster.local:9090
+            - name: LOKI_URL
+              value: http://loki.logging.svc.cluster.local:3100
+            - name: TEMPO_URL
+              value: http://tempo.observability.svc.cluster.local:3200
           resources:
             requests:
               cpu: 100m
