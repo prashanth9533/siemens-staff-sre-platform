@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: sample-api
-          image: siemens-sample-api:v2
+          image: siemens-sample-api:v3
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

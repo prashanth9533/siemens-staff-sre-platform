@@ -68,6 +68,18 @@ REQUEST_LATENCY = Histogram(
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Sample API starting")
+
+    # Initialize Prometheus metric series before receiving traffic
+    REQUEST_COUNT.labels(
+        method="GET",
+        endpoint="/api/orders",
+        status="200",
+    )
+
+    REQUEST_LATENCY.labels(
+        endpoint="/api/orders"
+    )
+
     yield
     logger.info("Sample API shutting down")
     tracer_provider.force_flush()
