@@ -15,6 +15,12 @@ spec:
       labels:
         app: temporal
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: temporal
           image: temporalio/auto-setup:1.25.2
