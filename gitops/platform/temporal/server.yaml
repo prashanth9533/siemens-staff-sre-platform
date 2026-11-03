@@ -54,22 +54,16 @@ spec:
               port: 7233
             initialDelaySeconds: 60
             periodSeconds: 20
+          volumeMounts:
+            - name: dynamic-config
+              mountPath: /etc/temporal/config/dynamicconfig
+              readOnly: true
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: temporal
-  namespace: temporal
-spec:
-  type: ClusterIP
-  selector:
-    app: temporal
-  ports:
-    - name: frontend
-      port: 7233
-      targetPort: 7233
+      volumes:
+        - name: dynamic-config
+          configMap:
+            name: temporal-dynamic-config
