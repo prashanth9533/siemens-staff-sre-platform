@@ -23,7 +23,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: temporal-worker
-          image: siemens-temporal-worker:v4
+          image: siemens-temporal-worker:v5
           imagePullPolicy: IfNotPresent
           env:
             - name: TEMPORAL_ADDRESS
